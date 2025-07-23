@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useActiveWallet } from "thirdweb/react";
-import { createThirdwebClient, getContract } from "thirdweb";
+import { getContract } from "thirdweb";
 import { sepolia } from "thirdweb/chains";
 import { getOwnedNFTs } from "thirdweb/extensions/erc1155";
 import type { NFT } from "thirdweb";
-
-const { NEXT_PUBLIC_THIRDWEB_CLIENT_ID } = process.env;
+import { client } from "@/lib/thirdwebClient";
 
 export default function Profile() {
   const [nfts, setNfts] = useState<(NFT & { quantityOwned: bigint })[]>([]);
@@ -25,10 +24,6 @@ export default function Profile() {
       try {
         const NFT_CONTRACT_ADDRESS =
           "0x50A4e8137566d62c343A232F6A152eB7065c7F11";
-
-        const client = createThirdwebClient({
-          clientId: NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
-        });
 
         const contract = getContract({
           client,

@@ -1,7 +1,8 @@
-import { createThirdwebClient, getContract, sendTransaction } from "thirdweb";
+import { getContract, sendTransaction } from "thirdweb";
 import { privateKeyToAccount } from "thirdweb/wallets";
 import { safeTransferFrom } from "thirdweb/extensions/erc1155";
 import { sepolia } from "thirdweb/chains";
+import { client } from "./thirdwebClient";
 
 const { PRIVATE_KEY, THIRDWEB_API_KEY, NFT_CONTRACT_ADDRESS } = process.env;
 const CHAIN = sepolia;
@@ -28,9 +29,6 @@ export async function createWalletAndSendNFT(email: string) {
 
   const { address } = await walletRes.json();
 
-  const client = createThirdwebClient({
-    secretKey: PRIVATE_KEY!,
-  });
   const account = privateKeyToAccount({
     client,
     privateKey: PRIVATE_KEY!,

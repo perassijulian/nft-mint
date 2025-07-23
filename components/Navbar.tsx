@@ -4,9 +4,7 @@ import { ConnectButton } from "thirdweb/react";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 import Link from "next/link";
 import Image from "next/image";
-import { createThirdwebClient } from "thirdweb";
-
-const { NEXT_PUBLIC_THIRDWEB_CLIENT_ID } = process.env;
+import { client } from "@/lib/thirdwebClient";
 
 export default function Navbar() {
   const wallets = [
@@ -15,14 +13,6 @@ export default function Navbar() {
     createWallet("com.coinbase.wallet"),
     createWallet("me.rainbow"),
   ];
-
-  console.log("PRIVATE_KEY ", NEXT_PUBLIC_THIRDWEB_CLIENT_ID);
-  if (!NEXT_PUBLIC_THIRDWEB_CLIENT_ID) {
-    return;
-  }
-  const client = createThirdwebClient({
-    clientId: NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
-  });
 
   return (
     <nav className="bg-white shadow-md">
