@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { createThirdwebClient } from "thirdweb";
 
-const { PRIVATE_KEY } = process.env;
+const { NEXT_PUBLIC_THIRDWEB_CLIENT_ID } = process.env;
 
 export default function Navbar() {
   const wallets = [
@@ -16,8 +16,12 @@ export default function Navbar() {
     createWallet("me.rainbow"),
   ];
 
+  console.log("PRIVATE_KEY ", NEXT_PUBLIC_THIRDWEB_CLIENT_ID);
+  if (!NEXT_PUBLIC_THIRDWEB_CLIENT_ID) {
+    return;
+  }
   const client = createThirdwebClient({
-    secretKey: PRIVATE_KEY!,
+    clientId: NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
   });
 
   return (
