@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getContract } from "@thirdweb-dev/react";
 import Image from "next/image";
 import { useActiveWallet } from "thirdweb/react";
+import { createThirdwebClient, getContract } from "thirdweb";
+import { sepolia } from "thirdweb/chains";
+import { getOwnedNFTs } from "thirdweb/extensions/erc1155";
+import type { NFT } from "thirdweb";
+
+const { NEXT_PUBLIC_THIRDWEB_CLIENT_ID } = process.env;
 
 export default function Profile() {
-  const [nfts, setNfts] = useState([]);
+  const [nfts, setNfts] = useState<(NFT & { quantityOwned: bigint })[]>([]);
   const [loading, setLoading] = useState(true);
   const wallet = useActiveWallet();
 
@@ -21,12 +26,28 @@ export default function Profile() {
         const NFT_CONTRACT_ADDRESS =
           "0x50A4e8137566d62c343A232F6A152eB7065c7F11";
 
-        const nftContract = await getContract(NFT_CONTRACT_ADDRESS);
-        const walletAddress = await wallet.getAddress();
+        const client = createThirdwebClient({
+          clientId: NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
+        });
+
+        const contract = getContract({
+          client,
+          chain: sepolia,
+          address: NFT_CONTRACT_ADDRESS,
+        });
+
+        const address = wallet.getAccount()?.address;
+        if (!address) throw new Error("Wallet address not found");
 
         // Get NFTs for the wallet
-        const ownedNFTs = await nftContract.erc1155.getOwned(walletAddress);
-        setNfts(ownedNFTs);
+        const owned = await getOwnedNFTs({
+          contract,
+          address,
+          start: 0,
+          count: 50,
+        });
+
+        setNfts(owned);
       } catch (error) {
         console.error("Error fetching NFTs:", error);
       } finally {
@@ -66,9 +87,9 @@ export default function Profile() {
         <p>You don't have any NFTs yet.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {nfts.map((nft) => (
+          {nfts.map((nft, i) => (
             <div
-              key={nft.metadata.id}
+              key={i}
               className="border rounded-lg overflow-hidden shadow-lg"
             >
               {nft.metadata.image && (

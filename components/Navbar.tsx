@@ -2,7 +2,6 @@
 
 import { ConnectButton } from "thirdweb/react";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
-
 import Link from "next/link";
 import Image from "next/image";
 import { createThirdwebClient } from "thirdweb";
