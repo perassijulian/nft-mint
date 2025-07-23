@@ -3,7 +3,6 @@
 import { ConnectButton } from "thirdweb/react";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 import Link from "next/link";
-import Image from "next/image";
 import { client } from "@/lib/thirdwebClient";
 
 export default function Navbar() {
@@ -20,12 +19,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link href="/" className="flex items-center">
-              <Image
-                src="/img/wordmark-dark.png"
-                alt="Logo"
-                width={180}
-                height={50}
-              />
+              NFT
             </Link>
           </div>
 
